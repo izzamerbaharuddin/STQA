@@ -55,3 +55,52 @@ the way you would treat a real, working piece of software handed to a
 QA team: it does what it's supposed to do in the common cases — your
 job across the testing phases is to find out where that stops being
 true.
+
+
+## Note for Week 5 and 6 (for other testers)
+## Week 5 — Security and Performance (`/05_Security_Performance/`)
+
+Files: `security_tests.py`, `locustfile.py`, plus the Week 5 report
+(exported to Word/PDF) and evidence screenshots/logs.
+
+```bash
+cd pytodo_pro
+pip install -r requirements.txt
+python app.py                        # terminal 1, leave running
+
+# terminal 2 — automated security checks
+pip install requests itsdangerous
+python security_tests.py
+
+# terminal 2 — performance test
+pip install locust
+python -m locust -f locustfile.py --host http://127.0.0.1:5000
+# open http://localhost:8089, set Users=20, Spawn rate=2, run ~3 minutes
+```
+
+Console output and the Locust results screenshot are archived in
+`/05_Security_Performance/evidence/`.
+
+## Week 6 — Automation and Regression (`/06_Automation_Regression/`)
+
+Files: `test_regression_api.py`, `test_ui_regression.py`, plus the Week 6
+report and execution evidence.
+
+```bash
+# API regression suite — no server needs to be running, it uses Flask's
+# test client directly. Run from the folder containing pytodo_pro/.
+pip install pytest
+python -m pytest test_regression_api.py -v
+# Result: 20 passed, 4 xfailed, 0 failed
+# (the 4 xfailed are confirmed, unfixed defects: DEF-001, DEF-003/DEF-006, DEF-005)
+
+# UI regression — requires the app running separately (python app.py).
+# Uses Microsoft Edge; Selenium auto-downloads a matching msedgedriver.
+pip install selenium
+python -m pytest test_ui_regression.py -v
+# Result: 2 passed
+```
+
+Console output for both suites is archived in
+`/06_Automation_Regression/evidence/`. Re-run both suites in Week 7 and
+Week 8 as the regression gate before finalising metrics.
