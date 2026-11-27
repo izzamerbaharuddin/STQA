@@ -1,2 +1,0 @@
-# STQA
-STQA Group Assignments
